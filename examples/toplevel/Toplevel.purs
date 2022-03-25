@@ -7,6 +7,7 @@ import Deku.Control.Functions (u)
 import Deku.Graph.Attribute (cb)
 import Deku.Graph.DOM ((:=))
 import Deku.Graph.DOM as D
+import Deku.Graph.DOM.Shorthand as S
 import Deku.Pursx ((~!))
 import Deku.Toplevel ((🚀))
 import Effect (Effect)
@@ -36,7 +37,9 @@ main =
 </div>
 """) ~!
           { mydiv: []
-          , mybutton: D.button [ D.OnClick := cb (const $ push unit) ] {}
+          , mybutton: D.button
+            [ D.OnClick := cb (const $ push unit) ]
+            (S.text "Click me to change the background color")
           }
       )
   ) 🚀
