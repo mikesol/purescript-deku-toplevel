@@ -2885,7 +2885,7 @@ var PS = {};
   var main = Deku_Toplevel.runInBody(Deku_Create.createAll())()(function (push) {
       return Deku_Control_Functions.u(Deku_Pursx.psxR({
           reflectSymbol: function () {
-              return "\x0a<div ~mydiv~>\x0a  <h1>hello!</h1>\x0a  <p>this is what a no-frills deku app looks like</p>\x0a  <p>it is powered by pursx, a html-like format inspired by jsx</p>\x0a  <h2>Why Deku</h2>\x0a  <li>\x0a    <ul>It's fast</ul>\x0a    <ul>\x0a      Well, that's about it for now... it's fast,\x0a      but perhaps it has other advantages!\x0a    </ul>\x0a  </li>\x0a  <p>\x0a    Gratuitous demo: click the button below\x0a    to change the background of this div.\x0a  </p>\x0a  ~mybutton~\x0a</div>\x0a";
+              return "\x0a<div ~mydiv~>\x0a  <h1>Hello!</h1>\x0a  <p>This is what a no-frills deku app looks like.</p>\x0a  <p>It is powered by pursx, a html-like format inspired by JSX.</p>\x0a  <h2>Why Deku</h2>\x0a  <li>\x0a    <ul>It's fast.</ul>\x0a    <ul>\x0a      Well, that's about it for now... it's fast,\x0a      but perhaps it has other advantages!\x0a    </ul>\x0a  </li>\x0a  <p>\x0a    <span style=\"font-weight:800;\">Gratuitous demo alert:</span>\x0a      click the button below to change the background of this div.\x0a  </p>\x0a  ~mybutton~\x0a</div>\x0a";
           }
       })()(Type_Proxy["Proxy"].value)({
           mydiv: [  ],
