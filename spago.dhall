@@ -8,6 +8,7 @@
   , "prelude"
   , "tuples"
   , "web-html"
+  , "web-dom"
   ]
 , packages = ./packages.dhall
 , sources = [ "src/**/*.purs" ]

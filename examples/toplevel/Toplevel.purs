@@ -35,7 +35,7 @@ main =
   ~mybutton~
 </div>
 """) ~!
-          { mydiv: D.div'attr []
+          { mydiv: []
           , mybutton: D.button [ D.OnClick := cb (const $ push unit) ] {}
           }
       )
