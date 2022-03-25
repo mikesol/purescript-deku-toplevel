@@ -7,6 +7,7 @@ import Deku.Control.Functions (u)
 import Deku.Graph.Attribute (cb)
 import Deku.Graph.DOM ((:=))
 import Deku.Graph.DOM as D
+import Deku.Graph.DOM.Shorthand as S
 import Deku.Pursx ((~!))
 import Deku.Toplevel ((🚀))
 import Effect (Effect)
@@ -21,13 +22,13 @@ main =
   <p>This is what a no-frills deku app looks like.</p>
   <p>It is powered by pursx, a html-like format inspired by JSX.</p>
   <h2>Why Deku</h2>
-  <li>
-    <ul>It's fast.</ul>
-    <ul>
+  <ul>
+    <li>It's fast.</li>
+    <li>
       Well, that's about it for now... it's fast,
       but perhaps it has other advantages!
-    </ul>
-  </li>
+    </li>
+  </ul>
   <p>
     <span style="font-weight:800;">Gratuitous demo alert:</span>
       click the button below to change the background of this div.
@@ -36,7 +37,9 @@ main =
 </div>
 """) ~!
           { mydiv: []
-          , mybutton: D.button [ D.OnClick := cb (const $ push unit) ] {}
+          , mybutton: D.button
+            [ D.OnClick := cb (const $ push unit) ]
+            (S.text "Click me to change the background color")
           }
       )
   ) 🚀
