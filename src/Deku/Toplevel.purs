@@ -63,3 +63,17 @@ runInBody scene loop = do
   for_ (toElement <$> b') \elt -> runInElement elt scene loop
 
 infix 1 runInBody as 🚀
+
+io
+  :: forall push sn graph control
+   . Create (root :: Element Root sn) () graph
+  => Nub graph graph
+  => { i :: (push -> Effect Unit) -> { | sn } /\ control
+     , o ::
+         forall proofB
+          . push
+         -> control
+         -> MDOM RunDOM RunEngine proofB Unit graph control
+     }
+  -> Effect Unit
+io oi = runInBody oi.i oi.o

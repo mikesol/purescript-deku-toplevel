@@ -9,14 +9,13 @@ import Deku.Graph.DOM ((:=))
 import Deku.Graph.DOM as D
 import Deku.Graph.DOM.Shorthand as S
 import Deku.Pursx ((~!))
-import Deku.Toplevel ((🚀))
+import Deku.Toplevel (io)
 import Effect (Effect)
 import Type.Proxy (Proxy(..))
 
-main :: Effect Unit
-main =
-  ( \push -> u $
-      ( (Proxy :: _ """
+px
+  :: Proxy
+    """
 <div ~mydiv~>
   <h1>Hello!</h1>
   <p>This is what a no-frills deku app looks like.</p>
@@ -35,15 +34,21 @@ main =
   </p>
   ~mybutton~
 </div>
-""") ~!
+"""
+px = Proxy
+
+main :: Effect Unit
+main = io
+  { i: \push -> u $
+      ( px ~!
           { mydiv: []
           , mybutton: D.button
-            [ D.OnClick := cb (const $ push unit) ]
-            (S.text "Click me to change the background color")
+              [ D.OnClick := cb (const $ push unit) ]
+              (S.text "Click me to change the background color")
           }
       )
-  ) 🚀
-     \_ -> const $ change
-        { "root.psx.mydiv": D.div'attr
-            [ D.Style := "background-color: rgb(195,212,209);" ]
-        }
+  , o: \_ -> const $ change
+      { "root.psx.mydiv": D.div'attr
+          [ D.Style := "background-color: rgb(195,212,209);" ]
+      }
+  }
