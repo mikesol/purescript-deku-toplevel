@@ -8,14 +8,12 @@ import Deku.Graph.Attribute (cb)
 import Deku.Graph.DOM ((:=))
 import Deku.Graph.DOM as D
 import Deku.Graph.DOM.Shorthand as S
-import Deku.Pursx ((~!))
-import Deku.Toplevel (io)
+import Deku.Pursx (psx, (~!))
+import Deku.Toplevel ((🚀))
 import Effect (Effect)
 import Type.Proxy (Proxy(..))
 
-px
-  :: Proxy
-    """
+px = Proxy :: Proxy  """
 <div ~mydiv~>
   <h1>Hello!</h1>
   <p>This is what a no-frills deku app looks like.</p>
@@ -35,20 +33,6 @@ px
   ~mybutton~
 </div>
 """
-px = Proxy
 
 main :: Effect Unit
-main = io
-  { i: \push -> u $
-      ( px ~!
-          { mydiv: []
-          , mybutton: D.button
-              [ D.OnClick := cb (const $ push unit) ]
-              (S.text "Click me to change the background color")
-          }
-      )
-  , o: \_ -> const $ change
-      { "root.psx.mydiv": D.div'attr
-          [ D.Style := "background-color: rgb(195,212,209);" ]
-      }
-  }
+main = unit 🚀 \_ _ -> psx px
