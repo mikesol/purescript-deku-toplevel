@@ -5,7 +5,7 @@ import Prelude
 import Data.Foldable (for_)
 import Deku.Control (deku)
 import Deku.Core (Element)
-import Deku.Interpret (effectfulDOMInterpret, makeFFIDOMSnapshot)
+import Deku.Interpret (FFIDOMSnapshot, effectfulDOMInterpret, makeFFIDOMSnapshot)
 import Effect (Effect)
 import FRP.Event (Event, create, subscribe)
 import Web.DOM.Element as Web.DOM
@@ -18,20 +18,25 @@ runInElement
   :: forall push
    . Web.DOM.Element
   -> push
-  -> ((push -> Effect Unit) -> Event push -> Element)
+  -> ( (push -> Effect Unit)
+       -> Event push
+       -> Element Event (FFIDOMSnapshot -> Effect Unit)
+     )
   -> Effect Unit
 runInElement elt psh mksn = do
-    ffi <- makeFFIDOMSnapshot
-    { push, event } <- create
-    let evt = deku elt (mksn push event) effectfulDOMInterpret
-    void $ subscribe evt \i -> i ffi
-    push psh
-
+  ffi <- makeFFIDOMSnapshot
+  { push, event } <- create
+  let evt = deku elt (mksn push event) effectfulDOMInterpret
+  void $ subscribe evt \i -> i ffi
+  push psh
 
 runInBody
   :: forall push
    . push
-  -> ((push -> Effect Unit) -> Event push -> Element)
+  -> ( (push -> Effect Unit)
+       -> Event push
+       -> Element Event (FFIDOMSnapshot -> Effect Unit)
+     )
   -> Effect Unit
 runInBody push go = do
   b' <- window >>= document >>= body
