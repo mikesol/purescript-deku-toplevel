@@ -163,7 +163,7 @@ let additions =
   , "web-dom"
   , "web-events"
   ], repo = "https://github.com/mikesol/purescript-deku.git"
-        , version = "newtypes"
+        , version = "main"
       }
       , event =
         { dependencies =
