@@ -2,7 +2,7 @@ module Deku.Toplevel where
 
 import Prelude
 
-import Data.Foldable (for_)
+import Data.Maybe (maybe)
 import Deku.Control (deku)
 import Deku.Core (Element)
 import Deku.Interpret (FFIDOMSnapshot, effectfulDOMInterpret, makeFFIDOMSnapshot)
@@ -23,12 +23,36 @@ runInElement
        -> Element Event (FFIDOMSnapshot -> Effect Unit)
      )
   -> Effect Unit
-runInElement elt psh mksn = do
+runInElement elt psh mksn = void $ runInElement' elt psh mksn
+
+runInElement'
+  :: forall push
+   . Web.DOM.Element
+  -> push
+  -> ( (push -> Effect Unit)
+       -> Event push
+       -> Element Event (FFIDOMSnapshot -> Effect Unit)
+     )
+  -> Effect (Effect Unit)
+runInElement' elt psh mksn = do
   ffi <- makeFFIDOMSnapshot
   { push, event } <- create
   let evt = deku elt (mksn push event) effectfulDOMInterpret
-  void $ subscribe evt \i -> i ffi
+  sub <- subscribe evt \i -> i ffi
   push psh
+  pure sub
+
+runInBody'
+  :: forall push
+   . push
+  -> ( (push -> Effect Unit)
+       -> Event push
+       -> Element Event (FFIDOMSnapshot -> Effect Unit)
+     )
+  -> Effect (Effect Unit)
+runInBody' push go = do
+  b' <- window >>= document >>= body
+  maybe (pure (pure unit)) (\elt -> runInElement' elt push go) (toElement <$> b')
 
 runInBody
   :: forall push
@@ -38,8 +62,7 @@ runInBody
        -> Element Event (FFIDOMSnapshot -> Effect Unit)
      )
   -> Effect Unit
-runInBody push go = do
-  b' <- window >>= document >>= body
-  for_ (toElement <$> b') \elt -> runInElement elt push go
+runInBody push go = void $ runInBody' push go
 
 infix 1 runInBody as 🚀
+infix 1 runInBody' as 🚆
