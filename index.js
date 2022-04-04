@@ -429,7 +429,6 @@ var PS = {};
   var Control_Apply = $PS["Control.Apply"];
   var Control_Category = $PS["Control.Category"];
   var Control_Plus = $PS["Control.Plus"];
-  var Data_Function = $PS["Data.Function"];
   var Data_Maybe = $PS["Data.Maybe"];
   var Data_Monoid = $PS["Data.Monoid"];
   var Data_Semigroup = $PS["Data.Semigroup"];
@@ -452,11 +451,6 @@ var PS = {};
                   };
               })())(Control_Applicative.pure(dictApplicative)(Data_Unit.unit));
           };
-      };
-  };
-  var for_ = function (dictApplicative) {
-      return function (dictFoldable) {
-          return Data_Function.flip(traverse_(dictApplicative)(dictFoldable));
       };
   };
   var sequence_ = function (dictApplicative) {
@@ -524,7 +518,6 @@ var PS = {};
       }
   };
   exports["traverse_"] = traverse_;
-  exports["for_"] = for_;
   exports["sequence_"] = sequence_;
   exports["oneOf"] = oneOf;
   exports["foldableArray"] = foldableArray;
@@ -1785,10 +1778,11 @@ var PS = {};
   "use strict";
   $PS["Deku.Toplevel"] = $PS["Deku.Toplevel"] || {};
   var exports = $PS["Deku.Toplevel"];
+  var Control_Applicative = $PS["Control.Applicative"];
   var Control_Bind = $PS["Control.Bind"];
-  var Data_Foldable = $PS["Data.Foldable"];
   var Data_Functor = $PS["Data.Functor"];
   var Data_Maybe = $PS["Data.Maybe"];
+  var Data_Unit = $PS["Data.Unit"];
   var Deku_Control = $PS["Deku.Control"];
   var Deku_Interpret = $PS["Deku.Interpret"];
   var Effect = $PS["Effect"];
@@ -1797,29 +1791,35 @@ var PS = {};
   var Web_HTML_HTMLDocument = $PS["Web.HTML.HTMLDocument"];
   var Web_HTML_HTMLElement = $PS["Web.HTML.HTMLElement"];
   var Web_HTML_Window = $PS["Web.HTML.Window"];                
-  var runInElement = function (elt) {
+  var runInElement$prime = function (elt) {
       return function (psh) {
           return function (mksn) {
               return function __do() {
                   var ffi = Deku_Interpret.makeFFIDOMSnapshot();
                   var v = FRP_Event.create();
                   var evt = Deku_Control.deku(FRP_Event.eventIsEvent)(elt)(mksn(v.push)(v.event))(Deku_Interpret.effectfulDOMInterpret);
-                  Data_Functor["void"](Effect.functorEffect)(FRP_Event.subscribe(evt)(function (i) {
+                  var sub = FRP_Event.subscribe(evt)(function (i) {
                       return i(ffi);
-                  }))();
-                  return v.push(psh)();
+                  })();
+                  v.push(psh)();
+                  return sub;
               };
+          };
+      };
+  };
+  var runInBody$prime = function (push) {
+      return function (go) {
+          return function __do() {
+              var b$prime = Control_Bind.bind(Effect.bindEffect)(Control_Bind.bind(Effect.bindEffect)(Web_HTML.window)(Web_HTML_Window.document))(Web_HTML_HTMLDocument.body)();
+              return Data_Maybe.maybe(Control_Applicative.pure(Effect.applicativeEffect)(Control_Applicative.pure(Effect.applicativeEffect)(Data_Unit.unit)))(function (elt) {
+                  return runInElement$prime(elt)(push)(go);
+              })(Data_Functor.map(Data_Maybe.functorMaybe)(Web_HTML_HTMLElement.toElement)(b$prime))();
           };
       };
   };
   var runInBody = function (push) {
       return function (go) {
-          return function __do() {
-              var b$prime = Control_Bind.bind(Effect.bindEffect)(Control_Bind.bind(Effect.bindEffect)(Web_HTML.window)(Web_HTML_Window.document))(Web_HTML_HTMLDocument.body)();
-              return Data_Foldable.for_(Effect.applicativeEffect)(Data_Foldable.foldableMaybe)(Data_Functor.map(Data_Maybe.functorMaybe)(Web_HTML_HTMLElement.toElement)(b$prime))(function (elt) {
-                  return runInElement(elt)(push)(go);
-              })();
-          };
+          return Data_Functor["void"](Effect.functorEffect)(runInBody$prime(push)(go));
       };
   };
   exports["runInBody"] = runInBody;
