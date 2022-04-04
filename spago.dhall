@@ -5,10 +5,11 @@
   , "either"
   , "event"
   , "foldable-traversable"
+  , "maybe"
   , "prelude"
   , "tuples"
-  , "web-html"
   , "web-dom"
+  , "web-html"
   ]
 , packages = ./packages.dhall
 , sources = [ "src/**/*.purs" ]
