@@ -159,11 +159,11 @@ let additions =
   , "typelevel-peano"
   , "unordered-collections"
   , "unsafe-coerce"
-  , "variant"
+  , "variant","phantom-event"
   , "web-dom"
   , "web-events"
   ], repo = "https://github.com/mikesol/purescript-deku.git"
-        , version = "v0.1.0"
+        , version = "v0.2.0"
       }
       , event =
         { dependencies =
@@ -177,6 +177,12 @@ let additions =
           ]
         , repo = "https://github.com/mikesol/purescript-event.git"
         , version = "v1.4.2"
+        }, phantom-event =
+        { dependencies =
+          [ "event"
+          ]
+        , repo = "https://github.com/mikesol/purescript-phantom-event.git"
+        , version = "v0.0.1"
         }
       , behaviors =
         { dependencies =
