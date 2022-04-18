@@ -6,7 +6,6 @@
   , "event"
   , "foldable-traversable"
   , "maybe"
-  , "phantom-event"
   , "prelude"
   , "tuples"
   , "web-dom"

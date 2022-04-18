@@ -1,6 +1,6 @@
 {
 	"name": "purescript-deku-toplevel",
-	"version": "0.2.0.0",
+	"version": "0.2.3.0",
 	"description": "Toplevel functions for starting deku apps.",
 	"scripts": {
 		"postinstall": "node node_modules/puppeteer/install.js",
